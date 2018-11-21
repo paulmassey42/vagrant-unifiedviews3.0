@@ -1,0 +1,78 @@
+---
+# - name: "required by ansible"
+#  raw: apt-get install aptitude -y
+#  become: true
+#  become_method: sudo
+
+# - name: Add the ansible ppa repository
+#  apt_repository:
+#    validate_certs: no
+#    repo: 'ppa:ansible/ansible-2.5'
+#    state: present
+    
+#- name: Update and upgrade apt packages
+#  become: true
+#  become_method: sudo
+#  apt:
+#    upgrade: yes
+#    update_cache: yes
+#    cache_valid_time: 86400 #One day
+#  tags:
+#    - basic
+
+- name: Install list of packages
+  become: true
+  become_method: sudo     
+  apt:
+    pkg: 
+      - python-pip
+      - git
+      - kinit
+      - krb5-user
+      - libffi-dev
+      - libssl-dev
+      - krb5-config
+      - libkrb5-dev
+      - libssl-dev
+      - libsasl2-dev
+      - libsasl2-modules-gssapi-mit
+    state: present
+  tags:
+    - basic
+
+- name: install pywinrm
+  become: true
+  become_method: sudo     
+  pip:
+    name: pywinrm
+  tags:
+    - basic
+
+- name: install passlib
+  become: true
+  become_method: sudo     
+  pip:
+    name: passlib
+  tags:
+    - basic
+    
+- name: install pykerberos
+  become: true
+  become_method: sudo     
+  pip:
+    name: pykerberos
+  tags:
+    - basic
+
+- name: Update /etc/hosts file (add dev.data.vlaanderen.be on local host)
+  lineinfile:
+    dest: /etc/hosts
+    regexp: 'dev.data\.vlaanderen\.be'
+    line: '127.0.0.1 dev.data.vlaanderen.be'
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - basic
+
+...

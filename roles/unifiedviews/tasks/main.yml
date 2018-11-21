@@ -1,0 +1,43 @@
+---
+- name: Make sure Required directories exist
+  file:
+    dest: "{{ item }}"
+    state: directory
+    owner: "unifiedviews"
+    group: "unifiedviews"
+    mode: 0777
+  with_items:
+    - /home/unifiedviews/data/unified-views/dpus
+    - /home/unifiedviews/data/unified-views/logs
+    - /home/unifiedviews/data/unified-views/backend/temp/export
+    - /home/unifiedviews/data/unified-views/backend/temp/import
+    - /home/unifiedviews/data/unified-views/dpu
+    - /home/unifiedviews/data/unified-views/tmp
+    - /home/unifiedviews/data/unified-views/lib
+    - /home/unifiedviews/data/unified-views/backend
+    - /home/unifiedviews/data/unified-views/tmp
+    - /home/unifiedviews/data/mysql
+
+- name: Copy the unified views configuration files
+  copy:
+    src: ./templates/config
+    dest: /home/unifiedviews/data
+    owner: "unifiedviews"
+    group: "unifiedviews"
+    mode: 0777
+    
+- name: clone repository
+  git:
+    repo: 'https://github.com/tenforce/docker-unified-views.git'
+    dest: /home/unifiedviews/main
+    accept_hostkey: yes
+    version: feature/compactmodular-3.0-releasebuild 
+    clone: yes
+    update: yes
+    
+- name: startup docker
+  shell: docker-compose -f cm-docker-compose.yml up -d
+  args:
+    chdir: /home/unifiedviews/main
+  
+...

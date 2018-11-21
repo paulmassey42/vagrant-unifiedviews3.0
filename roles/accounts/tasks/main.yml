@@ -1,0 +1,50 @@
+---
+- name: Ensure group "docker group" exists
+  group:
+    name: docker
+    state: present
+
+- name: Add the user 'unifiedviews' with a bash shell and add to 'docker' group
+  user:
+    name: "{{installation_user}}"
+    shell: /bin/bash
+    home: /home/{{installation_user}}
+    groups: docker,sudo
+    append: yes
+    state: present
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: /home/{{installation_user}}/.ssh/id_rsa
+  tags:
+    - accounts
+
+- name: Ensure group "{{installation_user}}" exists
+  group:
+    name: "{{installation_user}}"
+    state: present
+    
+- name: Set the user password
+  shell: echo {{installation_user}}:{{installation_password}} | chpasswd
+  tags:
+    - accounts
+
+- name: Allow '{{installation_user}}' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%{{installation_user}}'
+    line: '%{{installation_user}} ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+    
+- name: Make sure basic deployment directories exists
+  file:
+    dest: "{{ item }}"
+    state: directory
+    owner: "{{installation_user}}"
+  with_items:
+    - /home/{{installation_user}}/deployment
+    - /home/{{installation_user}}/.git/config
+  tags:
+    - accounts
+    
+...

@@ -16,14 +16,13 @@ Vagrant.configure(2) do |config|
     # config.cache.enable :apt
   end
 
-  config.vm.box = "boxcutter/ubuntu1604-desktop"
+  config.vm.box = "paulmassey/bionic64-ansible"
  
   # if Vagrant.has_plugin?("vagrant-docker-compose")
   #  config.vm.provision :docker
   #  config.vm.provision :docker_compose
   # end
 
-  config.vm.provision :shell, path: "bootstrap.sh"
   # Disable automatic box update checking. If you disable this, then
   # config.vm.box_download_insecure = true
   # boxes will only be checked for updates when the user runs
@@ -31,7 +30,7 @@ Vagrant.configure(2) do |config|
   # config.vm.box_check_update = false
   config.vm.synced_folder ".", "/vagrant"
   config.vm.provider "virtualbox" do |vb|
-      vb.name = "vagrant-unifiedviews3.0.0"
+      vb.name = "vagrant-unifiedviews3X"
       vb.gui = true
       vb.customize ["modifyvm", :id, "--memory", 8192]
       vb.customize ["modifyvm", :id, "--vram", 64]
@@ -42,5 +41,9 @@ Vagrant.configure(2) do |config|
       vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
       # Customize the amount of memory on the VM:
       vb.memory = "8192"
+  end
+  config.vm.provision "ansible_local" do |ansible2|
+    ansible2.playbook = "playbook.yml"
+    # ansible2.vault_password_file = "vault_pass"
   end
 end

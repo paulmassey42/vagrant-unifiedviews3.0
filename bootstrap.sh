@@ -3,8 +3,6 @@
 ####################################################################
 # Update the standard stuff ...
 export DEBIAN_FRONTEND=noninteractive
-apt-get -y update
-# apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 apt-get install -y gawk dos2unix emacs curl make autoconf wget git sudo zip gnome gdm3
 apt-get install -y apt-transport-https ca-certificates gnupg2 software-properties-common
 apt-get remove -y docker docker-engine

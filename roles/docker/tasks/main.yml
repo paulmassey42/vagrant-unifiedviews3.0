@@ -1,0 +1,50 @@
+---
+- name: Install docker dependencies
+  become: true
+  become_method: sudo    
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+      - aufs-tools
+      - cgroupfs-mount
+      - curl
+    state: present
+    update_cache: true
+  tags:
+    - docker
+
+- name: Install list of packages
+  apt:
+    name: docker.io
+    state: present
+  tags:
+    - docker
+
+# - name: upgrade all installed parts
+#  become: true
+#  become_method: sudo     
+#  apt:
+#    allow_unauthenticated=yes
+#    upgrade=yes
+#  tags:
+#    - docker
+
+#- service: name=docker state=restarted
+#  become: true
+#  become_method: sudo
+#  tags:
+#    - docker
+
+# - name: 'add users to docker group'
+#  become: true
+#  become_method: sudo     
+#  user:
+#    name: '{{ item }}'
+#    groups: 'docker'
+#    append: 'yes'
+#  with_items: '{{ docker_group_members }}'
+#  when: 'docker_group_members is defined'
+#  tags:
+#    - docker

@@ -1,0 +1,38 @@
+---
+- name: Install list of basic packages which might be useful
+  become: true
+  become_method: sudo     
+  apt:
+    pkg: 
+      - gdm3
+      - xinit
+      - gnome-terminal
+      - emacs
+      - vim
+      - dos2unix
+      - wget
+      - tar
+      - xsltproc
+      - ruby
+      - openjdk-8-jre-headless
+      - libxml2-utils
+      - curl
+      - cron
+      - firefox
+    state: present
+    update_cache: true
+  register: reboot required
+  tags:
+    - basic
+
+# - name: GDM3 installation needs reboot to take effect
+#  shell: reboot
+#  async: 0
+#  poll: 0
+#  tags:
+#    - basic
+#
+# - name: wait for reboot to finish
+#  local_action: wait_for host={{ ansible_ssh_host }} state=started    
+#  tags:
+#    - basic

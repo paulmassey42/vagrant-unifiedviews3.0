@@ -1,0 +1,25 @@
+
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  vars_files:
+    - vars.yml
+  roles:
+    # standard tools
+  - basic_fix
+  - basic_tools
+  - docker
+  - docker-compose
+    # now get specific
+  - accounts
+  - unifiedviews
+  handlers:
+  - name: restart apache2
+    service: name=apache2 state=restarted sleep=60
+  - name: reboot required
+    become: yes
+    shell: sleep 2 && /sbin/shutdown -r now "Ansible system package upgraded"
+    async: 1
+    poll: 0    
+...

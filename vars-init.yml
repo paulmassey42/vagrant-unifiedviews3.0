@@ -1,0 +1,19 @@
+#######################################################
+installation_user: unifiedviews
+installation_password: unifiedviews
+
+#######################################################
+gituser: xxxeee
+gitpasswd: yyy
+gitauthtoken: ZZZ
+
+#######################################################
+# with this pwd one has access to the OSLO Docker repo 
+# on the test environment
+oslodockerpwd: 
+
+#######################################################
+account_email: XXX@YYY.COM
+#######################################################
+a2enmod: false
+
